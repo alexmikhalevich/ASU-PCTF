@@ -2,12 +2,7 @@
 from scapy.all import *
 from datetime import datetime
 import os
-
-
-logFPath = "./logs/packets.log"
-
-nic = "ens33"
-myFilter = 'dst port 5555'
+import sys
 
 
 import logging
@@ -33,7 +28,7 @@ def create_rotating_log(path, log):
 
     
    
-def call_back(packet):
+def call_back(packet, logFilePath):
     #print(packet.summary())
     #print(type(packet[TCP].payload))
     myPacket = {}
@@ -46,10 +41,21 @@ def call_back(packet):
     myPacket["rawPayload"] = str(packet[TCP].payload)
     if str(type(packet[TCP].payload)) == "<class 'scapy.packet.Raw'>":
         print(myPacket)
-        create_rotating_log(logFPath, myPacket)
+        create_rotating_log(logFilePath, myPacket)
         
 
- 
-if __name__ == "__main__":
-    sniff(iface = nic, filter = myFilter ,prn = call_back, store = 0, count = 0) 
+def startServiceAudit(port, logFilePath, nic):
     
+    myFilter = 'dst port ' + str(port)
+    sniff(iface = nic, filter = myFilter ,prn =lambda r:call_back(r, logFilePath), store = 0, count = 0)
+
+
+if __name__ == "__main__":
+
+    if len(sys.argv) != 2:
+         print("You have to add port like : ./script <port>")
+    else:
+        port = str(sys.argv[1])
+        logFilePath = "./logs/packets_" + port + ".log"
+        nic = "ens33"
+        startServiceAudit(port, logFilePath, nic)
