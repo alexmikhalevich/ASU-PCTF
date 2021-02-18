@@ -1,0 +1,14 @@
+1) Audit mode: get body of the http request (URL, Body) > in a text file 
+
+2) Defense mode: scan body by regex for patterns > send reset packets 
+
+3) a script to detect availabilty and disable the defense mode if not available
+
+
+
+./script -audit=enable -defense=enable -availabilty=enable
+
+
+wget htto://portal/mntor.php
+team1 srv1 aviable 
+set 
