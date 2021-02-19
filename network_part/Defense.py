@@ -50,7 +50,7 @@ def analyze_packet(pkt):
 if __name__ == "__main__":
 
     args = get_arguments()
-    if args.iface == None:
+    if args.iface == None or args.ourIP == None:
          print("You have to add an interface like : ./script --interface <interface> --ourIP <IP>")
     else:
         with open('payloads.txt') as f:
