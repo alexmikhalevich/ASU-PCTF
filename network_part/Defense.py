@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
 import argparse
 from scapy.all import *
-
+from firewall import *
+import time
 
 def get_arguments():
     parser = argparse.ArgumentParser()
@@ -16,10 +18,16 @@ def analyze_packet(pkt):
         body = str(pkt[TCP].payload)
         for i in malicious:
             if i in body:
-                ip = IP(src=pkt[IP].dst,dst=pkt[IP].src) 
-                tcp = TCP(sport=pkt[TCP].dport,dport=pkt[TCP].sport,flags='R',seq=pkt.ack)
-                msg = ip/tcp
-                send(msg)  
+                # ip = IP(src=pkt[IP].dst,dst=pkt[IP].src, flags='DF', id=0) 
+                # tcp = TCP(sport=pkt[TCP].dport,dport=pkt[TCP].sport,flags='R',seq=pkt.ack, window=0)
+                # msg = ip/tcp
+                # msg.show()
+                # send(msg)  
+                print(str([pkt[TCP].sport]))
+                add_rule(str(pkt[TCP].sport))
+                time.sleep(10)
+                flush()
+
 
 if __name__ == "__main__":
 
