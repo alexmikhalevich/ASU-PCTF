@@ -46,7 +46,7 @@ def call_back(packet, logFilePath):
 
 def startServiceAudit(port, logFilePath, nic):
     
-    myFilter = 'dst port ' + str(port)
+    myFilter = 'port ' + str(port)
     sniff(iface = nic, filter = myFilter ,prn =lambda r:call_back(r, logFilePath), store = 0, count = 0)
 
 
